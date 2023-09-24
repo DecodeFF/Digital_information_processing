@@ -1,0 +1,19 @@
+#include "dft.h"
+
+using namespace std;
+
+int main() {
+	int inv;
+	long size_x;
+	complex* x = new complex[1000];
+	cout << "0 - direct " << endl;
+	cout << "1 - inverse " << endl;
+	cout << "Choose type of DFT : ";
+	cin >> inv;
+	read_data(x, &size_x);
+	dft(x, size_x, inv);
+	save_data(x, size_x);
+	return 0;
+}
+
+

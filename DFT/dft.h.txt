@@ -1,0 +1,17 @@
+#include <iostream>
+#include <fstream>
+#include <math.h>
+
+#define PI 3.14159265358979323846
+
+typedef struct {
+	double real;
+	double imag;
+	double modulus;
+	double angle;
+} complex;
+
+void dft(complex*, long, int);
+void fft();
+void read_data(complex*, long*);
+void save_data(complex*, long);

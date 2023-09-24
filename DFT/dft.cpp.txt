@@ -1,0 +1,62 @@
+#include "dft.h"
+
+void dft(complex* x, long npt, int inv) {
+	double WN, wk;
+	double* XR = new double[npt];
+	double* XI = new double[npt];
+	
+	WN = 2 * PI / npt;
+	if (inv == 1) WN = -WN;
+	for (int k = 0; k < npt; k++) {
+		XR[k] = 0;
+		XI[k] = 0;
+		wk = k * WN;
+		for (int n = 0; n < npt; n++) 
+		{
+			XR[k] += x[n].real * cos(n * wk) - x[n].imag * sin(n * wk);
+			XI[k] += x[n].real * sin(n * wk) + x[n].imag * cos(n * wk);
+		}
+		if (inv == 1) 
+		{
+			XR[k] /= npt;
+			XI[k] /= npt;
+		}
+	}
+	for (int k = 0; k < npt; k++) {
+		x[k].real = XR[k];
+		x[k].imag = XI[k];
+	}
+	std::cout << "\nDFT is done!\n";
+}
+
+void read_data(complex* x, long* npt) {
+	std::ifstream in;
+	in.open("data.txt");
+	if (!in.is_open()) {
+		std::cout << "Error opening file" << std::endl;
+		return;
+	}
+	int i = 0;
+	for (i; !in.eof(); i++) {
+		in >> x[i].real >> x[i].imag;
+	}
+	*npt = i;
+	in.close();
+	std::cout << "\nData read successfully" << std::endl;
+}
+
+void save_data(complex* x, long npt) {
+	std::ofstream out;
+	out.open("output.txt");
+	if (!out.is_open()) {
+		std::cout << "Error opening file" << std::endl;
+		return;
+	}
+	out << "npt = " << npt << std::endl;
+	for (int i = 0; i < npt; i++) {
+		out << i + 1 << " " << x[i].real << " " << x[i].imag << std::endl;
+	}
+	out.close();
+	std::cout << "\nData saved successfully" << std::endl;
+}
+
