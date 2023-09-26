@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <cmath>
+
+void fft(double *x, int n) {
+  if (n == 1) {
+    return;
+  }
+
+  // Розділяємо вхідний масив на пари
+  double *x_even = x;
+  double *x_odd = x + n / 2;
+
+  // Обчислюємо ШПФ для кожної пари
+  fft(x_even, n / 2);
+  fft(x_odd, n / 2);
+
+  // Об'єднуємо результати
+  for (int i = 0; i < n / 2; i++) {
+    // Знаходимо амплітуду і фазу
+    double real = x_even[i] + x_odd[i];
+    double imag = x_even[i] - x_odd[i];
+    double amp = sqrt(real * real + imag * imag);
+    double phase = atan2(imag, real);
+
+    // Заносимо результати в вихідний масив
+    x[2 * i] = amp * cos(phase);
+    x[2 * i + 1] = amp * sin(phase);
+  }
+}
+int main() {
+  // Вхідний масив
+  double x[] = {5, 7, 3, 3, 0, 0, 15, 32, 13, 7};
+
+  // Обчислюємо ШПФ
+  fft(x, 9);
+
+  // Виводимо результати
+  for (int i = 0; i < 9; i++) {
+    printf("%f\n", x[i]);
+  }
+
+  return 0;
+}
